@@ -1,0 +1,45 @@
+name: Build tvOS App
+
+# 触发条件：push 到 main 分支或手动触发
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      # 1. 检出仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. 设置 Xcode 环境
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '14.3'
+
+      # 3. 构建 tvOS App
+      - name: Build tvOS app
+        run: |
+          xcodebuild \
+            -scheme TVBrowserApp \
+            -destination 'platform=tvOS,name=Apple TV' \
+            -configuration Release \
+            -archivePath ${{ github.workspace }}/build/TVBrowserApp.xcarchive archive
+          
+          xcodebuild \
+            -exportArchive \
+            -archivePath ${{ github.workspace }}/build/TVBrowserApp.xcarchive \
+            -exportPath ${{ github.workspace }}/build \
+            -exportOptionsPlist ExportOptions.plist
+
+      # 4. 上传构建产物 IPA
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: TVBrowser.ipa
+          path: build/TVBrowserApp.ipa
