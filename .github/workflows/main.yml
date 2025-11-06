@@ -20,7 +20,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '14.3'
+          xcode-version: 'xcode-latest'
 
       # 3. 构建 tvOS App
       - name: Build tvOS app
