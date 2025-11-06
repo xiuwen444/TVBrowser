@@ -39,7 +39,7 @@ jobs:
 
       # 4. 上传构建产物 IPA
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TVBrowser.ipa
           path: build/TVBrowserApp.ipa
